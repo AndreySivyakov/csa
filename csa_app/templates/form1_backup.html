@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<style media="screen">
+  #f1_header {
+    font-family:Arial, Helvetica, sans-serif;
+    color: #3E3E3E;
+  }
+  #request_type {
+    width: 30%;
+  }
+</style>
+
+<html>
+  <h3 id="f1_header">Form 1: First Create (Parent and/or Child)</h3><br>
+  <body onload="hide_children()">
+    <input type="text" name="request_type_to_pass" id="request_type_to_pass" value="1" style="display:none;">
+    <select name="request_type" id="request_type" class="form-control input-md" autofocus= true>
+      <option value="" selected="selected">Select request type</option>
+      <option value="Create only parent contract">Create only parent contract</option>
+      <option value="Create parent and children contracts">Create parent and children contracts</option>
+      <option value="Add children contracts to existing parent contract">Parent contract exists, create child contract(s)</option><br>
+    </select><br>
+    <div id="parent_only" style="display:none;">{% include "csa_app/form1_parent_only.html" %}</div>
+    <div id="parent_and_children" style="display:none;">{% include "csa_app/form1_parent_and_children.html" %}</div>
+    <div id="add_children" class="row" style="display:none;">{% include "csa_app/form1_add_children.html" %}</div>
+
+
+
+    <h5 style="position:relative; right:-18px;">Children Contracts</h5>
+    <div style="position:relative; right:-17px;" id="child_button" class="form-row">
+        <button type="button" name="button_add" class="btn btn-secondary btn-xs" onclick="unhide_child ()">Add Child Contract</button>
+        <button type="button" name="button_remove" class="btn btn-secondary btn-xs" onclick="remove_child ()">Remove Child Contract</button>
+    </div>
+    <br>
+      {% for child_contract in mult_children %}
+        <div class="form-group col-md-2 mb-0">
+            {{ child_contract.child_vendor_number }}
+        </div>
+        <div class="form-group col-md-2 mb-0">
+            {{ child_contract.child_vendor_name }}
+        </div>
+        <div class="form-group col-md-4 mb-0">
+            {{ child_contract.child_contr_name }}
+        </div>
+        <div class="form-group col-md-2 mb-0">
+            {{ child_contract.child_PGrp }}
+        </div>
+        <div class="form-group col-md-2 mb-0">
+            {{ child_contract.child_POrg }}
+        </div>
+      {% endfor %}
+    </div>
+  </body>
+
+  <script>
+    // set variables
+    var request_type = document.getElementById("request_type"),
+    child_and_parent = document.getElementById("child_and_parent"),
+    child_only = document.getElementById("child_only"),
+    children = document.getElementById("children"),
+    request_type_to_pass = document.getElementById("request_type_to_pass");
+
+    // add event listener to the main selector (request type)
+    request_type.addEventListener('change', watch_request_type);
+    request_type.addEventListener('change', hide_children);
+
+    // watch changes in request type drop down menu to render relevant subforms
+    function watch_request_type () {
+      if (request_type.selectedIndex == 1) {
+        child_and_parent.style.display = 'block';
+        child_only.style.display = 'none';
+        hide_children ();
+        children.style.display = "block";
+      } else if (request_type.selectedIndex == 2) {
+        child_only.style.display = 'block';
+        child_and_parent.style.display = 'none';
+        hide_children ();
+        children.style.display = "block";
+      } else {
+        child_only.style.display = 'none';
+        child_and_parent.style.display = 'none';
+        hide_children ();
+        children.style.display = "none";
+      }
+    }
+
+    function hide_children () {
+      for (var i=1; i<15; ++i) {
+        var id1="id_form-" + i + "-child_vendor_number",
+        id2="id_form-" + i + "-child_vendor_name",
+        id3="id_form-" + i + "-child_contr_name",
+        id4="id_form-" + i + "-child_PGrp",
+        id5="id_form-" + i + "-child_POrg";
+        document.getElementById(id1).style.display = 'none';
+        document.getElementById(id2).style.display = 'none';
+        document.getElementById(id3).style.display = 'none';
+        document.getElementById(id4).style.display = 'none';
+        document.getElementById(id5).style.display = 'none';
+      }
+    }
+
+    var children_unhid = 0;
+    function unhide_child () {
+      if (children_unhid <14) {
+        ++children_unhid;
+        var id1="id_form-" + children_unhid + "-child_vendor_number",
+        id2="id_form-" + children_unhid + "-child_vendor_name",
+        id3="id_form-" + children_unhid + "-child_contr_name",
+        id4="id_form-" + children_unhid + "-child_PGrp",
+        id5="id_form-" + children_unhid + "-child_POrg";
+        document.getElementById(id1).style.display = 'block';
+        document.getElementById(id2).style.display = 'block';
+        document.getElementById(id3).style.display = 'block';
+        document.getElementById(id4).style.display = 'block';
+        document.getElementById(id5).style.display = 'block';
+      }
+    }
+
+    function remove_child () {
+      if (children_unhid >0) {
+        var id1="id_form-" + children_unhid + "-child_vendor_number",
+        id2="id_form-" + children_unhid + "-child_vendor_name",
+        id3="id_form-" + children_unhid + "-child_contr_name",
+        id4="id_form-" + children_unhid + "-child_PGrp",
+        id5="id_form-" + children_unhid + "-child_POrg";
+        document.getElementById(id1).style.display = 'none';
+        document.getElementById(id2).style.display = 'none';
+        document.getElementById(id3).style.display = 'none';
+        document.getElementById(id4).style.display = 'none';
+        document.getElementById(id5).style.display = 'none';
+        children_unhid = children_unhid - 1;
+      }
+    }
+
+    function fill_request_type_to_pass () {
+      request_type_to_pass.value = request_type.selectedIndex;
+    }
+
+  </script>
+
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html>
+ <head>
+  <title>Setup</title>
+  <img src="{% static "pics/suncor-logo.jpg" %}" style="max-width:10%; max-height:10%;"><br>
+  <img src="{% static "pics/Line.jpg" %}" style="max-width:30%; margin-left: 15px;">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style media="screen">
+  .check_boxes{
+    display:none;
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:11px;
+    letter-spacing: 0.2px;
+    color: #3E3E3E;
+  }
+  #citySel, #catSel, #subcatSel {
+    display:none;
+  }
+  </style>
+ </head>
+ <body>
+   <form method="post">
+     {% csrf_token %}
+
+    <div class="container" style="width:600px;">
+     <input type="text" id="user_name" name="user_name" class="form-control input-md" placeholder="Enter your name" spellcheck="false">
+     <br />
+     <select name="contract_type" id="stateSel" class="form-control input-md">
+      <option value="" selected="selected">Select contract type</option>
+     </select>
+     <br />
+     <select name="type_of_request" id="countySel" class="form-control input-md">
+      <option value="" selected="selected">Select type of request</option>
+     </select>
+     <br />
+     <select name="paper_contr_type" id="citySel" class="form-control input-md">
+      <option value="" selected="selected">Select paper contract type</option>
+     </select>
+     <br />
+     <h4 id="Check_box_titles" style="display:none; font-family:Arial, Helvetica, sans-serif; font-size:14px; letter-spacing: 0.4px; color: #3E3E3E;">Select all that apply...</h4>
+     <div id='box1' class="check_boxes">
+       <input type="checkbox" name="box1" id='idbox1' value="Target value"> Target Value (Fund increase/transfer, add/update POrg/payment terms/plants)<br>
+     </div>
+     <div id='box2' class="check_boxes">
+       <input type="checkbox" name="box2" id='idbox2' value="Items update"> Items update (rates, new item, condition, part number, inactivation, etc.)<br>
+     </div>
+     <div id='box3' class="check_boxes">
+       <input type="checkbox" name="box3" id='idbox3' value="Date Extension"> Date Extension (header and all items)<br>
+     </div>
+     <div id='box4' class="check_boxes">
+       <input type="checkbox" name="box4" id='idbox4' value="Header Information"> Header Information - PGroup/Contract Name/Contract Owner/Incoterm<br>
+     </div>
+     <div id='box5' class="check_boxes">
+       <input type="checkbox" name="box5" id='idbox5' value="Payment terms"> Update payment terms ONLY (no target value change)<br>
+     </div><br><br>
+     <select name="optcat" id="catSel" class="form-control input-md">
+       <option value="" selected="selected">Select Category</option>
+     </select><br>
+     <select name="optsubcat" id="subcatSel" class="form-control input-md">
+       <option value="" selected="selected">Select Subcategory</option>
+     </select><br>
+     <input type="text" name="submission_check" id="s_ch" value="no" style="display:none;">
+     <input id = "submit_button" name="setup_button" type="submit" value="Submit" class="btn btn-primary" disabled=True onclick="valid_submit()" >
+     </div>
+
+    </form>
+ </body>
+</html>
+
+<script>
+
+var stateObject = {
+  "Paper Contract": {
+      "First Create (Parent and/or Child)":[],
+      "First Release (Parent and/or Child)": ["Limit Line", "Service/Material Master"],
+      "Amendment": ["Limit Line", "Service/Material Master"],
+      "Lock/Unlock Contract": [],
+  },
+  "Pricing Agreement": {
+    "First Create (Parent and/or Child)":[],
+    "First Release (Parent and/or Child)": ["Limit Line", "Service/Material Master"],
+    "Amendment": ["Limit Line", "Service/Material Master"],
+    "Lock/Unlock Contract": [],
+  },
+  "Non-Disclosure Agreement":{
+    "First Create (Parent and/or Child)":[],
+    "First Release (Parent and/or Child)": ["Non-Disclosure Agreement"],
+    "Amendment": ["Non-Disclosure Agreement"],
+    "Lock/Unlock Contract": [],
+  }
+}
+
+var catObject ={
+    "Aviation Services":
+  [
+    "Aircraft Maintenance & Instrumentation",
+    "Aviation Charter Services",
+    "Aviation Ground Support",
+    "Suncor Owned Aircraft"
+  ],
+  "Chemicals, Gases, & Fluids":
+  [
+    "Catalysts","Chemical Unclassified","Commodity Chemicals","Fuel Additives",
+    "Fuels & Lubricants","Industrial Gases","Lubricant Additives",
+    "Specialty Chemicals","Water Treatment Services"
+  ],
+}
+
+window.onload = function () {
+    var stateSel = document.getElementById("stateSel"),
+        countySel = document.getElementById("countySel"),
+        citySel = document.getElementById("citySel");
+    document.getElementById("user_name").focus();
+    for (var state in stateObject) {
+        stateSel.options[stateSel.options.length] = new Option(state, state);
+    }
+    stateSel.onchange = function () {
+        countySel.length = 1; // remove all options bar first
+        citySel.length = 1; // remove all options bar first
+        if (this.selectedIndex < 1) {
+          countySel.options[0].text = "Select type of request"
+          citySel.options[0].text = "Select paper contract type"
+          return; // done
+        }
+        countySel.options[0].text = "Select type of request"
+        for (var county in stateObject[this.value]) {
+            countySel.options[countySel.options.length] = new Option(county, county);
+        }
+        if (countySel.options.length==2) {
+          countySel.selectedIndex=1;
+          countySel.onchange();
+        }
+
+    }
+    stateSel.onchange(); // reset in case page is reloaded
+    countySel.onchange = function () {
+        citySel.length = 1; // remove all options bar first
+        if (this.selectedIndex < 1) {
+          citySel.options[0].text = "Select type of request"
+          citySel.style.display = "block"
+          return; // done
+        }
+        else if (this.selectedIndex == 1 || this.selectedIndex == 4) {
+          citySel.style.display = "none"
+        } else {
+          citySel.style.display = "block"
+        }
+        citySel.options[0].text = "Select paper contract type"
+
+        var cities = stateObject[stateSel.value][this.value];
+        for (var i = 0; i < cities.length; i++) {
+            citySel.options[citySel.options.length] = new Option(cities[i], cities[i]);
+        }
+        if (citySel.options.length==2) {
+          citySel.selectedIndex=1;
+        }
+
+    }
+
+  citySel.addEventListener('change', checkPCT);
+  stateSel.addEventListener('change', checkPCT);
+  countySel.addEventListener('change', checkPCT);
+
+  function checkPCT () {
+    var title = document.getElementById("Check_box_titles");
+    box1.style.display = "none";
+    box2.style.display = "none";
+    box3.style.display = "none";
+    box4.style.display = "none";
+    box5.style.display = "none";
+    title.style.display = "none";
+
+    for(i = 1; i < 6; i++){
+        document.getElementById('idbox' + i).checked = false;
+    }
+    if (stateSel.selectedIndex == 1 || stateSel.selectedIndex == 2) {
+      if (countySel.selectedIndex == 3) {
+        if (citySel.selectedIndex == 1){
+          box1.style.display = "block";
+          box2.style.display = "none";
+          box3.style.display = "block";
+          box4.style.display = "block";
+          box5.style.display = "block";
+          title.style.display = "block";
+          show_cats ();
+        } else if (citySel.selectedIndex == 2) {
+          box1.style.display = "block";
+          box2.style.display = "block";
+          box3.style.display = "block";
+          box4.style.display = "block";
+          box5.style.display = "block";
+          title.style.display = "block";
+          show_cats ();
+        }
+      }
+    }
+    if (stateSel.selectedIndex == 3 && countySel.selectedIndex == 3) {
+      box1.style.display = "none";
+      box2.style.display = "none";
+      box3.style.display = "block";
+      box4.style.display = "block";
+      box5.style.display = "none";
+      title.style.display = "block";
+      show_cats ();
+    } else if (countySel.selectedIndex == 1 || countySel.selectedIndex == 4) {
+      show_cats ();
+    } else if (countySel.selectedIndex == 2) {
+      if (stateSel.selectedIndex == 1 || stateSel.selectedIndex == 2) {
+        show_cats ();
+      } else if(stateSel.selectedIndex == 3 && countySel.selectedIndex == 2 && citySel.selectedIndex == 1) {
+        show_cats ();
+      }
+    }
+  }
+}
+
+var submit_button = document.getElementById('submit_button'),
+  username = document.getElementById('user_name'),
+  countySel = document.getElementById('countySel'),
+  citySel = document.getElementById('citySel'),
+  catSel = document.getElementById('catSel'),
+  subcatSel = document.getElementById('subcatSel'),
+  submission_check = document.getElementById('s_ch');
+
+function show_cats () {
+  catSel.style.display = "block";
+  subcatSel.style.display = "block";
+  if (catSel.length > 1) {
+    catSel.length = 1;
+  }
+  subcatSel.length = 1;
+  for (var cat in catObject) {
+      catSel.options[catSel.options.length] = new Option(cat, cat);
+  }
+
+  catSel.onchange = function () {
+      subcatSel.length = 1; // remove all options bar first
+      if (this.selectedIndex < 1) {
+        subcatSel.options[0].text = "Select Subcategory"
+        return; // done
+      }
+      subcatSel.options[0].text = "Select Subcategory"
+      for (var subcat in catObject[this.value]) {
+          subcatSel.options[subcatSel.options.length] = new Option(catObject[this.value][subcat], catObject[this.value][subcat]);
+      }
+      if (subcatSel.options.length==2) {
+        subcatSel.selectedIndex=1;
+      }
+
+  }
+
+
+}
+
+document.addEventListener('change', enable_button);
+
+function enable_button () {
+    var len_checked = 0;
+    for(i = 1; i < 6; i++){
+      if (document.getElementById('idbox' + i).checked == true) {
+        ++len_checked;
+      }
+    }
+    if (countySel.selectedIndex == '' ||
+        countySel.selectedIndex == 0 ||
+        subcatSel.selectedIndex == 0 ||
+        subcatSel.length == 0
+        ) {
+      submit_button.disabled = true;
+    } else if (countySel.selectedIndex == 3 &&
+              len_checked == 0) {
+                submit_button.disabled = true;
+    } else if (countySel.selectedIndex == 2 &&
+               citySel.selectedIndex == 0) {
+                submit_button.disabled = true;
+    } else if (username.value == '') {
+      submit_button.disabled = true;
+    } else {
+      submission_check.innerHTML = "yes";
+      submit_button.disabled = false;
+    }
+}
+
+function valid_submit () {
+  submission_check.value = "yes";
+}
+
+</script>

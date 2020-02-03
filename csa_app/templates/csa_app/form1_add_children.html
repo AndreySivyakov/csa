@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% include "csa_app/links.html" %}
+  </head>
+  <body onload="hide_children()">
+    <div class="container">
+      <h3 id="f1_header">Form 1: First Create (Parent and/or Child)</h3><br>
+      <p style="font-size"10px;>* All mandatory fields must be filled in before moving on to the next form</p>
+      <form class="" action="" method="post">
+        {% csrf_token %}
+        <div class="row">
+          <div class="form-group col-md-4 mb-0">
+            {{ ParentContrNumberForm.parent_contr_number }}
+          </div>
+        </div>
+        <h5>Children Contracts</h5>
+        <div id="child_button" class="form-row">
+          <button type="button" name="button_add" class="btn btn-secondary btn-xs" onclick="unhide_child ()">   Add Child Contract   </button>
+          <button type="button" name="button_remove" class="btn btn-secondary btn-xs" onclick="remove_child ()">   Remove Child Contract   </button>
+        </div><br>
+        {{ mult_children.management_form }}
+        <div class="row">
+          {% for child_contract in mult_children %}
+            <div class="form-group col-md-2 mb-0">
+                {{ child_contract.child_vendor_number }}
+            </div>
+            <div class="form-group col-md-2 mb-0">
+                {{ child_contract.child_vendor_name }}
+            </div>
+            <div class="form-group col-md-4 mb-0">
+              <div class="col-sm">
+                {{ child_contract.child_contr_name }}
+                <span>{{ child_contract.child_contr_name.help_text }}</span>
+              </div>
+            </div>
+            <div class="form-group col-md-2 mb-0">
+                {{ child_contract.child_PGrp }}
+            </div>
+            <div class="form-group col-md-2 mb-0">
+                {{ child_contract.child_POrg }}
+            </div>
+          {% endfor %}
+        </div>
+        <div style="position:relative; left:1px;">
+          <input type="submit" id="submit_button" name="" value="Submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+  </body>
+
+  <script>
+  function hide_children () {
+    for (var i=1; i<15; ++i) {
+      var id1="id_form-" + i + "-child_vendor_number",
+      id2="id_form-" + i + "-child_vendor_name",
+      id3="id_form-" + i + "-child_contr_name",
+      id4="id_form-" + i + "-child_PGrp",
+      id5="id_form-" + i + "-child_POrg";
+      document.getElementById(id1).style.display = 'none';
+      document.getElementById(id2).style.display = 'none';
+      document.getElementById(id3).style.display = 'none';
+      document.getElementById(id4).style.display = 'none';
+      document.getElementById(id5).style.display = 'none';
+    }
+    document.getElementById('id_form-TOTAL_FORMS').value = 1;
+  };
+
+  var children_unhid = 0,
+  total_forms = document.getElementById('id_form-TOTAL_FORMS'),
+  submit_button = document.getElementById('submit_button');
+  total_forms_value = children_unhid + 1;
+
+  function unhide_child () {
+    if (children_unhid <14) {
+      ++children_unhid;
+      ++total_forms_value;
+      total_forms.value = total_forms_value;
+      var id1="id_form-" + children_unhid + "-child_vendor_number",
+      id2="id_form-" + children_unhid + "-child_vendor_name",
+      id3="id_form-" + children_unhid + "-child_contr_name",
+      id4="id_form-" + children_unhid + "-child_PGrp",
+      id5="id_form-" + children_unhid + "-child_POrg";
+      document.getElementById(id1).style.display = 'block';
+      document.getElementById(id2).style.display = 'block';
+      document.getElementById(id3).style.display = 'block';
+      document.getElementById(id4).style.display = 'block';
+      document.getElementById(id5).style.display = 'block';
+    }
+  };
+
+  function remove_child () {
+    if (children_unhid >0) {
+      var id1="id_form-" + children_unhid + "-child_vendor_number",
+      id2="id_form-" + children_unhid + "-child_vendor_name",
+      id3="id_form-" + children_unhid + "-child_contr_name",
+      id4="id_form-" + children_unhid + "-child_PGrp",
+      id5="id_form-" + children_unhid + "-child_POrg";
+      document.getElementById(id1).style.display = 'none';
+      document.getElementById(id2).style.display = 'none';
+      document.getElementById(id3).style.display = 'none';
+      document.getElementById(id4).style.display = 'none';
+      document.getElementById(id5).style.display = 'none';
+      children_unhid = children_unhid - 1;
+      total_forms_value = total_forms_value - 1;
+      total_forms.value = total_forms_value;
+    }
+  };
+
+  document.addEventListener('mousemove', disable_submit)
+  //submit_button.disabled==true;
+
+  function disable_submit () {
+    for (var i=0; i<total_forms_value; ++i) {
+      var id3="id_form-" + i + "-child_contr_name",
+        id5="id_form-" + i + "-child_POrg";
+        if (
+            document.getElementById(id3).value.trim()=="" ||
+            document.getElementById(id5).selectedIndex==0 ||
+            isAlphaNumeric(document.getElementById(id3).value)===false
+          )
+        {
+          submit_button.disabled=true;
+          return;
+        }
+    } submit_button.disabled=false;
+  };
+
+  // check for non-alphanumeric characters in contract names
+  function isAlphaNumeric(str) {
+    var code, i, len;
+    for (i = 0, len = str.length; i < len; i++) {
+      code = str.charCodeAt(i);
+      if (!(code > 47 && code < 58) && // numeric (0-9)
+          !(code > 64 && code < 91) && // upper alpha (A-Z)
+          !(code > 96 && code < 123)) { // lower alpha (a-z)
+        return false;
+      }
+    }
+    return true;
+  };
+  </script>
+
+</html>

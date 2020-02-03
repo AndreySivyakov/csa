@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3>Form 2: First Release Header Details</h3><br>
+      <form method="post">{% csrf_token %}
+        {% include "csa_app/form2_parent.html" %}
+        <div style="position:relative; left:1px">
+          <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+  </body>
+
+</html>

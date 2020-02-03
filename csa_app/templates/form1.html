@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<style media="screen">
+  #f1_header {
+    font-family:Arial, Helvetica, sans-serif;
+    color: #3E3E3E;
+  }
+  #request_type {
+    width: 30%;
+  }
+</style>
+
+<html>
+  <h3 id="f1_header">Form 1: First Create (Parent and/or Child)</h3><br>
+  <body onload="hide_children()">
+    <input type="text" name="request_type_to_pass" id="request_type_to_pass" value="1" style="display:none;">
+    <select name="request_type" id="request_type" class="form-control input-md" autofocus= true>
+      <option value="" selected="selected">Select request type</option>
+      <option value="Create only parent contract">Create only parent contract</option>
+      <option value="Create parent and children contracts">Create parent and children contracts</option>
+      <option value="Add children contracts to existing parent contract">Parent contract exists, create child contract(s)</option><br>
+    </select><br>
+  </body>

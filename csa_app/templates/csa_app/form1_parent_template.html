@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<div class="row">
+  <div class="form-group col-md-2 mb-0">
+      {{ ParentContractForm.parent_vendor_number }}
+  </div>
+  <div class="form-group col-md-2 mb-0">
+      {{ ParentContractForm.parent_vendor_name }}
+  </div>
+  <div class="form-group col-md-4 mb-0">
+      {{ ParentContractForm.parent_contr_name }}
+      <p id="mand">* mandatory field</p>
+  </div>
+  <div class="form-group col-md-2 mb-0">
+      {{ ParentContractForm.parent_PGrp }}
+  </div>
+  <div class="form-group col-md-2 mb-0">
+      {{ ParentContractForm.parent_POrg }}
+      <p id="mand">* mandatory field</p>
+  </div>
+</div>

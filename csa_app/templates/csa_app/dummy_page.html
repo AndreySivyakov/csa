@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h5>You successfully created a CSA request!</h5><br>
+      <form class="" action="" method="post">
+        {% csrf_token %}
+        <input id="download_button" type="submit" name="" value="Download your file" class="btn btn-primary" onclick="toggle_buttons ()">
+        <a id="go_home_button" href="http://127.0.0.1:8000" class="badge badge-primary" style="max-width:22%;display:none;">Return to the Setup Page</a>
+      </form>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+
+    function toggle_buttons () {
+      document.getElementById("download_button").style.display = "none";
+      document.getElementById("go_home_button").style.display = "block"
+    }
+
+  </script>
+
+</html>
