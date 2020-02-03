@@ -41,7 +41,45 @@
   <div class="form-group col-sm-4 mb-0">
       {{ Form2FormParent.form2_payment_terms }}
   </div>
-  <div class="form-group col-sm-4 mb-0">
+  <div id="reason" class="form-group col-sm-4 mb-0">
       {{ Form2FormParent.form2_reasons_for_outside }}
   </div>
+  {{ form.errors }}
+  {{ form.non_field_errors }}
 </div>
+
+<script type="text/javascript">
+  var reasons_for_outside = document.getElementById("reason"),
+  payment_terms = document.getElementById("id_form2_payment_terms");
+
+  window.onload = function() {
+    $("#reason").hide();
+  };
+
+  payment_terms.addEventListener('change', unhide_reasons_for_outside);
+
+  function unhide_reasons_for_outside () {
+    if (payment_terms.value==="60N Due 60 Days from Invoice Date" ||
+        payment_terms.selectedIndex==0) {
+      document.removeEventListener("mousemove", enable_button);
+      document.getElementById('submit_button').disabled = false;
+      reasons_for_outside.style.display = "none";
+      document.getElementById('id_form2_reasons_for_outside').selectedIndex = 0;
+      //alert(reasons_for_outside.selectedIndex);
+    } else {
+      reasons_for_outside.style.display = "block";
+      document.addEventListener('mousemove', enable_button);
+    }
+  };
+
+  function enable_button () {
+    //alert(document.getElementById('id_form2_reasons_for_outside').selectedIndex);
+    if (document.getElementById('id_form2_reasons_for_outside').selectedIndex > 0) {
+      document.getElementById('submit_button').disabled = false;
+    } else {
+      document.getElementById('submit_button').disabled = true;
+      unhide_reasons_for_outside ()
+    }
+  };
+
+</script>

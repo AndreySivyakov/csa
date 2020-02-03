@@ -128,7 +128,6 @@ def form1_add_children(request):
         parent_contr_num = ParentContrNumberForm(request.POST)
         formset = mult_children(request.POST)
         if parent_contr_num.is_valid() and formset.is_valid():
-            print("both forms valid")
             parent_contr_num.save(commit=True)
             parent_contr_num_obj = parent_contr_num.save()
             temp = ParentContract.objects.get(id=parent_contr_num_obj.id)
@@ -200,5 +199,8 @@ def forms_1_5(request):
 
 def form2(request):
     parent_contr_record = Form2FormParent()
-
+    if request.method == 'POST':
+        parent_contr_record = Form2FormParent(request.POST)
+        if parent_contr_record.is_valid():
+            print(request.POST.get('form2_reasons_for_outside'))
     return render(request, 'csa_app/form_2.html', {'Form2FormParent':Form2FormParent()})

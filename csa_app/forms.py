@@ -125,7 +125,7 @@ class Form2FormParent (forms.ModelForm):
     form2_POrg = forms.ChoiceField(choices=POrgs, required=True)
     form2_currency = forms.ChoiceField(choices=currency, required=True)
     form2_payment_terms = forms.ChoiceField(choices=payment_terms, required=True)
-    form2_reasons_for_outside = forms.ChoiceField(choices=reasons_for_outside, required=True)
+    form2_reasons_for_outside = forms.ChoiceField(choices=reasons_for_outside, required=False)
 
     class Meta:
         model = Form2
@@ -139,7 +139,7 @@ class Form2FormParent (forms.ModelForm):
         self.fields['form2_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
         self.fields['form2_contr_name'].widget.attrs['maxlength'] = _('40')
         self.fields['form2_contr_num'].widget.attrs['placeholder'] = _('Contract #')
-        self.fields['form2_target_value'].widget.attrs['placeholder'] = _('Overal SRM contract target value')
+        self.fields['form2_target_value'].widget.attrs['placeholder'] = _('Overal SRM contract target value ($)')
         self.fields['form2_currency'].widget.attrs['placeholder'] = _('Currency')
         self.fields['form2_payment_terms'].widget.attrs['placeholder'] = _('Payment Terms')
         self.fields['form2_validity_start'].help_text = 'Validity Start Date'
