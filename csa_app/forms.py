@@ -17,13 +17,22 @@ class AmendmentTypeForm(forms.ModelForm):
 my_fields_parent = ['parent_vendor_number','parent_vendor_name','parent_contr_name','parent_PGrp','parent_POrg']
 PGRps = [(None,'Select PGrp'), ('Oilsands 001', 'Oilsands 001'), ('Oilsands 003','Oilsands 003')]
 POrgs = [(None,'Select POrg'), ('Fort Hills POrg 5', 'Fort Hills POrg 5'), ('United Kingdom POrg 10','United Kingdom POrg 10')]
-currency = [(None,'Select Currency'), ('CAD Canadian Dform2_contr_numollar','CAD Canadian Dollar'), ('USD United States Dollar','USD United States Dollar')]
+currency = [(None,'Select Currency'), ('CAD Canadian Dollar','CAD Canadian Dollar'), ('USD United States Dollar','USD United States Dollar')]
 payment_terms = [(None,'Select Payment Terms'), ('60N Due 60 Days from Invoice Date','60N Due 60 Days from Invoice Date'), ('45N Due 45 Days from Invoice Date','45N Due 45 Days from Invoice Date')]
 reasons_for_outside = [(None, 'Select a Reason for Payment Terms outside of 60N'), ('Director approval','Director approval'), ('Brokerage fees','Brokerage fees')]
 form2_parent_fields = \
 [
     'form2_contr_num','form2_contr_name','form2_vendor_number','form2_vendor_name','form2_validity_start','form2_validity_end',
     'form2_POrg','form2_PGrp','form2_target_value','form2_currency','form2_payment_terms','form2_reasons_for_outside'
+]
+form2_child_fields = \
+[
+    'form2_contr_num','form2_contr_name','form2_vendor_number','form2_vendor_name','form2_validity_start','form2_validity_end',
+    'form2_POrg','form2_PGrp','form2_target_value','form2_currency','form2_payment_terms','form2_reasons_for_outside'
+]
+form2_amendment_fields = \
+[
+    'form2_contr_num', 'form2_validity_end', 'form2_contr_name', 'form2_PGrp', 'form2_owner_email'
 ]
 
 class ParentContractForm(forms.ModelForm):
@@ -44,6 +53,7 @@ class ParentContractForm(forms.ModelForm):
         self.fields['parent_vendor_name'].widget.attrs['placeholder'] = _('Vendor name')
         self.fields['parent_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
         self.fields['parent_contr_name'].widget.attrs['maxlength'] = _('40')
+        self.fields['parent_contr_name'].widget.attrs['pattern'] = _('[A-Za-z0-9 ]+')
         self.fields['parent_contr_name'].widget.attrs.update({'style' : 'border-color: red;'})
         self.fields['parent_POrg'].widget.attrs.update({'style' : 'border-color: red;'})
         for field in my_fields_parent:
@@ -70,6 +80,7 @@ class ChildContractForm(forms.ModelForm):
         self.fields['child_vendor_name'].widget.attrs['placeholder'] = _('Vendor name')
         self.fields['child_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
         self.fields['child_contr_name'].widget.attrs['maxlength'] = _('40')
+        self.fields['child_contr_name'].widget.attrs['pattern'] = _('[A-Za-z0-9 ]+')
         #self.fields['child_contr_name'].help_text = '* mandatory field'
         self.fields['child_contr_name'].widget.attrs.update({'style' : 'border-color: red;'})
         self.fields['child_POrg'].widget.attrs.update({'style' : 'border-color: red;'})
@@ -78,6 +89,8 @@ class ChildContractForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'form-control input-sm'
 
 class ParentContrNumberForm(forms.ModelForm):
+
+    parent_contr_number = forms.IntegerField(required=True, min_value=4600000000, max_value=4699999999)
 
     class Meta:
         model = ParentContract
@@ -117,7 +130,7 @@ class DateInput(forms.DateInput):
 
 class Form2FormParent (forms.ModelForm):
 
-    form2_contr_num = forms.IntegerField(required=True, min_value=4600000000, max_value=4699999999)
+
     form2_contr_name = forms.CharField(required=True)
     form2_vendor_number = forms.IntegerField(required=True, min_value=1)
     form2_vendor_name = forms.CharField(required=True)
@@ -126,6 +139,7 @@ class Form2FormParent (forms.ModelForm):
     form2_currency = forms.ChoiceField(choices=currency, required=True)
     form2_payment_terms = forms.ChoiceField(choices=payment_terms, required=True)
     form2_reasons_for_outside = forms.ChoiceField(choices=reasons_for_outside, required=False)
+    form2_target_value = forms.CharField(required=False)
 
     class Meta:
         model = Form2
@@ -137,6 +151,7 @@ class Form2FormParent (forms.ModelForm):
         self.fields['form2_vendor_number'].widget.attrs['placeholder'] = _('Vendor #')
         self.fields['form2_vendor_name'].widget.attrs['placeholder'] = _('Vendor name')
         self.fields['form2_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
+        self.fields['form2_contr_name'].widget.attrs['pattern'] = _('[A-Za-z0-9 ]+')
         self.fields['form2_contr_name'].widget.attrs['maxlength'] = _('40')
         self.fields['form2_contr_num'].widget.attrs['placeholder'] = _('Contract #')
         self.fields['form2_target_value'].widget.attrs['placeholder'] = _('Overal SRM contract target value ($)')
@@ -144,8 +159,80 @@ class Form2FormParent (forms.ModelForm):
         self.fields['form2_payment_terms'].widget.attrs['placeholder'] = _('Payment Terms')
         self.fields['form2_validity_start'].help_text = 'Validity Start Date'
         self.fields['form2_validity_end'].help_text = 'Validity End Date'
-        #self.fields['form2_contr_name'].widget.attrs.update({'style' : 'border-color: red;'})
-        #self.fields['form2_POrg'].widget.attrs.update({'style' : 'border-color: red;'})
+        self.fields['form2_contr_name'].help_text = 'Contract Name must not contain special characters'
         for field in form2_parent_fields:
+            self.fields[field].label = ''
+            self.fields[field].widget.attrs['class'] = 'form-control input-sm'
+
+
+
+class Form2FormChild (forms.ModelForm):
+
+    class Meta:
+        model = Form2
+        widgets = {'form2_validity_start' : DateInput(), 'form2_validity_end' : DateInput()}
+        fields = form2_child_fields
+
+
+
+class Form2Amendment(forms.ModelForm):
+
+    form2_contr_num = forms.IntegerField(required=True, min_value=4600000000, max_value=4699999999)
+    form2_contr_name = forms.CharField(required=True)
+    form2_PGrp = forms.ChoiceField(choices=PGRps, required=True)
+    form2_owner_email = forms.EmailField(required=True, max_length=100)
+
+    class Meta:
+        model = Form2
+        widgets = {'form2_validity_end' : DateInput()}
+        fields = form2_amendment_fields
+
+    def __init__(self, *args, **kwargs):
+        super(Form2Amendment, self).__init__(*args, **kwargs)
+        self.fields['form2_contr_num'].widget.attrs['placeholder'] = _('Contract #')
+        self.fields['form2_validity_end'].help_text = 'Validity End Date'
+        self.fields['form2_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
+        self.fields['form2_contr_name'].widget.attrs['pattern'] = _('[A-Za-z0-9 ]+')
+        self.fields['form2_contr_name'].widget.attrs['maxlength'] = _('40')
+        self.fields['form2_owner_email'].widget.attrs['placeholder'] = _('New contract owner email')
+        for field in form2_amendment_fields:
+            self.fields[field].label = ''
+            self.fields[field].widget.attrs['class'] = 'form-control input-sm'
+
+class Form2AmendmentHeader(forms.ModelForm):
+
+    form2_contr_num = forms.IntegerField(required=True, min_value=4600000000, max_value=4699999999)
+    form2_contr_name = forms.CharField(required=True)
+    form2_PGrp = forms.ChoiceField(choices=PGRps, required=True)
+    form2_owner_email = forms.EmailField(required=True, max_length=100)
+
+    class Meta:
+        model = Form2
+        fields = ['form2_contr_num','form2_contr_name','form2_PGrp','form2_owner_email']
+
+    def __init__(self, *args, **kwargs):
+        super(Form2AmendmentHeader, self).__init__(*args, **kwargs)
+        self.fields['form2_contr_num'].widget.attrs['placeholder'] = _('Contract #')
+        self.fields['form2_contr_name'].widget.attrs['placeholder'] = _('Contract name (max 40 characters, no special characters)')
+        self.fields['form2_contr_name'].widget.attrs['pattern'] = _('[A-Za-z0-9 ]+')
+        self.fields['form2_contr_name'].widget.attrs['maxlength'] = _('40')
+        self.fields['form2_owner_email'].widget.attrs['placeholder'] = _('New contract owner email')
+        for field in self.fields:
+            self.fields[field].label = ''
+            self.fields[field].widget.attrs['class'] = 'form-control input-sm'
+
+
+class Form2AmendmentDate(forms.ModelForm):
+
+    class Meta:
+        model = Form2
+        widgets = {'form2_validity_end' : DateInput()}
+        fields = ['form2_contr_num','form2_validity_end']
+
+    def __init__(self, *args, **kwargs):
+        super(Form2AmendmentDate, self).__init__(*args, **kwargs)
+        self.fields['form2_contr_num'].widget.attrs['placeholder'] = _('Contract #')
+        self.fields['form2_validity_end'].help_text = 'Validity End Date'
+        for field in self.fields:
             self.fields[field].label = ''
             self.fields[field].widget.attrs['class'] = 'form-control input-sm'

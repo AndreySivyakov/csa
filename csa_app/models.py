@@ -58,6 +58,7 @@ class Form2(models.Model):
     form2_incoterm = models.CharField(max_length=100, null=True, blank=True)
     form2_reasons_for_outside = models.CharField(max_length=100, null=True, blank=True)
     form2_child_or_parent = models.CharField(max_length=20, null=True, blank=True)
+    form2_owner_email = models.EmailField(max_length=100, null=True, blank=True)
 
     def __unicode__(self):
        return self.name

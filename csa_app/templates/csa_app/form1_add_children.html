@@ -118,8 +118,7 @@
         id5="id_form-" + i + "-child_POrg";
         if (
             document.getElementById(id3).value.trim()=="" ||
-            document.getElementById(id5).selectedIndex==0 ||
-            isAlphaNumeric(document.getElementById(id3).value)===false
+            document.getElementById(id5).selectedIndex==0
           )
         {
           submit_button.disabled=true;
@@ -128,19 +127,6 @@
     } submit_button.disabled=false;
   };
 
-  // check for non-alphanumeric characters in contract names
-  function isAlphaNumeric(str) {
-    var code, i, len;
-    for (i = 0, len = str.length; i < len; i++) {
-      code = str.charCodeAt(i);
-      if (!(code > 47 && code < 58) && // numeric (0-9)
-          !(code > 64 && code < 91) && // upper alpha (A-Z)
-          !(code > 96 && code < 123)) { // lower alpha (a-z)
-        return false;
-      }
-    }
-    return true;
-  };
   </script>
 
 </html>

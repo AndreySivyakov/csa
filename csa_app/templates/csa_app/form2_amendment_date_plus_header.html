@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3>Form 2: Amendment Header Details</h3>
+      <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p><br>
+      <form method="post">{% csrf_token %}
+        <div class="row">
+          <div class="form-group col-md-2 mb-0">
+            {{ Form2Amendment.form2_contr_num }}
+          </div>
+          <div class="form-group col-md-4">
+              {{ Form2Amendment.form2_contr_name }}
+          </div>
+          <div class="form-group col-sm-2">
+              {{ Form2Amendment.form2_PGrp }}
+          </div>
+          <div class="form-group col-md-2">
+              {{ Form2Amendment.form2_owner_email }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+            {{ Form2Amendment.form2_validity_end }}
+              <div class="validity_dates">{{ Form2Amendment.form2_validity_end.help_text }}</div>
+          </div>
+        </div>
+        <div style="position:relative; left:1px">
+          <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+  </body>
+
+</html>

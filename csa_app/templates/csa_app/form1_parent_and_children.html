@@ -11,9 +11,8 @@
       <h3 id="f1_header">Form 1: First Create (Parent and/or Child)</h3><br>
       <p style="font-size"10px;>* All mandatory fields must be filled in before moving on to the next form</p>
       <h5>Parent Contract</h5>
-      <form class="" action="" method="post">
-        {% csrf_token %}
-        {% "csa_app/form1_parent_template.html" %}
+      <form class="" action="" method="post">{% csrf_token %}
+        {% include "csa_app/form1_parent_template.html" %}
         <h5>Children Contracts</h5>
         <div id="child_button" class="form-row">
           <button type="button" name="button_add" class="btn btn-secondary btn-xs" onclick="unhide_child ()">   Add Child Contract   </button>
@@ -105,8 +104,8 @@ function remove_child () {
   }
 };
 
-document.addEventListener('mousemove', disable_submit)
-submit_button.disabled==true
+document.addEventListener('mousemove', disable_submit);
+//submit_button.disabled==true
 
 function disable_submit () {
   for (var i=0; i<total_forms_value; ++i) {
@@ -114,29 +113,13 @@ function disable_submit () {
       id5="id_form-" + i + "-child_POrg";
       if (
           document.getElementById(id3).value.trim()=="" ||
-          document.getElementById(id5).selectedIndex==0 ||
-          isAlphaNumeric(document.getElementById(id3).value)===false ||
-          isAlphaNumeric(document.getElementById("id_parent_contr_name").value)===false
+          document.getElementById(id5).selectedIndex==0
         )
       {
           submit_button.disabled=true;
           return;
       }
   } submit_button.disabled=false;
-};
-
-// check for non-alphanumeric characters in contract names
-function isAlphaNumeric(str) {
-  var code, i, len;
-  for (i = 0, len = str.length; i < len; i++) {
-    code = str.charCodeAt(i);
-    if (!(code > 47 && code < 58) && // numeric (0-9)
-        !(code > 64 && code < 91) && // upper alpha (A-Z)
-        !(code > 96 && code < 123)) { // lower alpha (a-z)
-      return false;
-    }
-  }
-  return true;
 };
 
 </script>

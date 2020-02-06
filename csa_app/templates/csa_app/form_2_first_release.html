@@ -12,7 +12,8 @@
 
   <body>
     <div class="container">
-      <h3>Form 2: First Release Header Details</h3><br>
+      <h3>Form 2: First Release Header Details</h3>
+      <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p><br>
       <form method="post">{% csrf_token %}
         {% include "csa_app/form2_parent.html" %}
         <div style="position:relative; left:1px">
