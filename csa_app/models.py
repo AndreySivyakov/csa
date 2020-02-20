@@ -44,7 +44,7 @@ class ChildContract(models.Model):
 
 class Form2(models.Model):
     form2_setup_ref = models.ForeignKey(Setup, on_delete=models.CASCADE, blank=True, null=True)
-    form2_contr_num = models.PositiveIntegerField(null=True, default=None)
+    form2_contr_num = models.BigIntegerField(null=True, default=None)
     form2_contr_name = models.CharField(max_length=100, null=True, blank=True)
     form2_vendor_number = models.PositiveIntegerField(null=True, default=None)
     form2_vendor_name = models.CharField(max_length=100, null=True, blank=True)

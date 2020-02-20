@@ -140,6 +140,7 @@ class Form2FormParent (forms.ModelForm):
     form2_payment_terms = forms.ChoiceField(choices=payment_terms, required=True)
     form2_reasons_for_outside = forms.ChoiceField(choices=reasons_for_outside, required=False)
     form2_target_value = forms.CharField(required=False)
+    form2_contr_num = forms.IntegerField(required=True, min_value=4600000000, max_value=4699999999)
 
     class Meta:
         model = Form2

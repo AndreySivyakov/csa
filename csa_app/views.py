@@ -247,6 +247,7 @@ def form2_first_release(request):
     parent_contr_record = Form2FormParent()
     if request.method == 'POST':
         parent_contr_record = Form2FormParent(request.POST)
+        print(parent_contr_record.is_valid())
         if parent_contr_record.is_valid():
             print('got here')
             parent_contr_record.save(commit=True)
