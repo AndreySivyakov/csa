@@ -13,7 +13,7 @@
   <body>
     <div class="container">
       <h3>Form 1: Lock/Unlock Contract</h3>
-      <form method="post">{% csrf_token %}
+      <form method="post" id="the_form">{% csrf_token %}
       <div style="position:relative; left: 1px;">
         <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
       </div><br>
@@ -54,6 +54,7 @@
 
 
       $( document ).ready(function() {
+        document.getElementById("the_form").reset();
         for (var i=1; i<15; ++i) {
           var id1="id_form-" + i + "-form2_contr_num",
           id2="id_form-" + i + "-form2_lock_unlock";
