@@ -14,7 +14,7 @@
     <div class="container">
       <h3>Form 2: Amendment Header Details</h3>
       <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p><br>
-      <form method="post">{% csrf_token %}
+      <form method="post" id='the_form'>{% csrf_token %}
         <div class="row">
           <div class="form-group col-md-3 mb-0">
             {{ Form2AmendmentHeader.form2_contr_num }}
@@ -35,5 +35,10 @@
       </form>
     </div>
   </body>
+
+  <script type="text/javascript">
+  $( document ).ready(function() {
+    document.getElementById("the_form").reset())};
+  </script>
 
 </html>

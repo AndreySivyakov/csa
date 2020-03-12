@@ -9,7 +9,7 @@
     <div class="container">
       <h3 id="f1_header">Form 1: First Create (Parent and/or Child)</h3><br>
       <p style="font-size"10px;>* All mandatory fields must be filled in before moving on to the next form</p>
-      <form class="" action="" method="post">
+      <form class="" action="" method="post" id ="the_form">
         {% csrf_token %}
         <div class="row">
           <div class="form-group col-md-4 mb-0">
@@ -52,6 +52,10 @@
   </body>
 
   <script>
+
+  $( document ).ready(function() {
+    document.getElementById("the_form").reset())};
+
   function hide_children () {
     for (var i=1; i<15; ++i) {
       var id1="id_form-" + i + "-child_vendor_number",

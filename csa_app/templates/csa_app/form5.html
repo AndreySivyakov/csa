@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    {% include "csa_app/links.html" %}
+    <style media="screen">
+      td {
+        font-family: Arial; font-size: 14px; font-weight: 100; color: #3E3E3E; padding: 15px;
+      }
+      span{
+        font-family: Arial; font-size: 12px; font-weight: 100; color: #3E3E3E; font-style: italic;
+      }
+      #mycheckbox{
+        vertical-align: top;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3 id="f1_header">Form 5: Lease Questionnaire</h3>
+      <form class="" action="" method="post">
+        {% csrf_token %}
+        <p style="font-size"10px;>
+          Answer the questions below from top to bottom by checking corresponding boxes. The questions are designed to be as objective as possible.
+          If you are not 100% sure the answer is "Yes", then assume the answer is "No".
+        </p><br>
+        <table style="width:85%" id="Form5Table">
+          <tr>
+            <td>Is this CSA request form for purely an administrative change to an existing contract?<br>
+              <span>(Administrative = revision to an existing contract number, assigning a contract number for the first time for an old contract_type
+                     (which didn't have one already), transferring funds between existing child contracts under an existing parent contract.)</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_1 }}</td>
+          </tr>
+          <tr>
+            <td>Is this contract purely for professional services?: legal, accountancy, recruitment, tax consultancy, human resources, professional printing
+              & photocopying services)<br>
+              <span>Example: Pricewaterhouse Coopers, Deloitte, E&Y, KPMG, Golder, Haines Frontier Printing, West Canadian Digital Imaging</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_2 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract a take-or-pay arrangement or is there a significant cost to Suncor in the event of early contract termination
+              that is an exception/deviation from the standard termination of convenience language around compensation following termination?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_3 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract a purchase contract where full payment is made within 1 year?<br>
+              <span>If payment term is greater than 1 year, this is "No", even if ownership transfers immediately.</span><br>
+              <span>Example: You would answer "Yes" if you are buying a fleet of autonomus haul trucks and related technology to be paid for all
+                within 1 year; you would answer "No" if you are making payments on the same fleet of haul trucks and related technology instead over a period of
+                years (i.e. >1 year). Other examples: commodity chemicals, consumer products to be sold within Petro-Canada stations (e.g. Coca-Cola, Old Dutch, etc.)</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_4 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract cancellable by both parties with 30 days notice?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_5 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract term, including all extensions possible, less than 30 days?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_6 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for services, where any assets used to provide the service that are owned by the contractor are used for a limited time?<br>
+                <span>(Limited time = the asset is not on a Suncor site for more than 30 consecutive days at a time)</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_7 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for one of the following asset types: bulldozers or railway cars?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_8 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for one of the following asset types?:  Buildings (including office space & warehouses) or marine vessels?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_9 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for one of the following asset types?:  Fleet vehicles (e.g. Element or Driving force) or office printers?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_10 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for services, where the assets used to provide the service are owned by Suncor?
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_11 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for services, where the assets used to provide the service that are owned by the contractor are of low value?<br>
+                <span>(Low value = the assets are individually worth <$5K USD if they were to be purchased new)<bp>
+                  Example: Tradespersons performing welding or electrician services using their own tools; however, these tools if
+                  purchased new it would be reasonable to expect would be <$5K USD each?</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_12 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for services, where any assets used to provide the service that are owned by the contractor are interchangeable?<br>
+                <span>(Interchangeable = the contractor has multiple assets of the same type & decides which specific one to use)<br>
+                  (Limited time = the asset is not on a Suncor site for more than 30 consecutive days at a time)<br>
+                  Example: Tradespersons performing welding or electrician services using their own tools; however, these tools if
+                  purchased new it would be reasonable to expect would be <$5K USD each?</span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_13 }}</td>
+          </tr>
+          <tr>
+            <td>Is the asset (e.g. equipment, machinery, trucks) also currently used by other companies & Suncor uses less than 75% of the available capacity?<br>
+                <span>Example: Suncor has a contract where a third-party comes to site with their truck to remove scrap tires; where possible the third-party picks
+                  up scrap tires from multiple operators in the area (on the same truck) to drive them to the recycle facility. </span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_14 }}</td>
+          </tr>
+          <tr>
+            <td>Is the contract for an intangible asset?  (e.g. computer software)<br>
+                <span>Examples of software include Adobe. Other examples include where Suncor subscribes to a third-party's cloud based platform (i.e. granted the
+                  ability to log-in), however, this does not exclude examples where there is a dedicated physical server for the cloud as this type of arrangement
+                  could be a lease. </span>
+            </td>
+            <td id="mycheckbox">{{ Form5Form.form5_15 }}</td>
+          </tr>
+        </table><br><br>
+        <input type="submit" class="btn btn-primary" name="" value="Submit"><br><br>
+      </form>
+    </div>
+  </body>
+</html>

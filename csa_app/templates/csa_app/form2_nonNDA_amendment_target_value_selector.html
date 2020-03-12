@@ -12,10 +12,11 @@
 
   <body>
     <div class="container">
-      <h3>Form 2: First Release Header Details</h3>
-      <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p><br>
+      <h3>Form 2: Amendment Header Details</h3>
       <form method="post">{% csrf_token %}
-        {% include "csa_app/form2_parent.html" %}
+        <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked> Add "NEW" Target Values for specific Porg's/Plant locations/Payment terms<br>
+        <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option2"> Overall SRM child contract target value increase
+        <br></br>
         <div style="position:relative; left:1px">
           <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
         </div>

@@ -47,7 +47,7 @@
        <input type="checkbox" name="box1" id='idbox1' value="Target value"> Target Value (Fund increase/transfer, add/update POrg/payment terms/plants)<br>
      </div>
      <div id='box2' class="check_boxes">
-       <input type="checkbox" name="box2" id='idbox2' value="Items update"> Items update (rates, new item, condition, part number, inactivation, etc.)<br>
+       <input type="checkbox" name="box2" id='idbox2' value="Items update" disabled="disabled"> Items update (rates, new item, condition, part number, inactivation, etc.)<br>
      </div>
      <div id='box3' class="check_boxes">
        <input type="checkbox" name="box3" id='idbox3' value="Date Extension"> Date Extension (header and all items)<br>
@@ -95,21 +95,7 @@ var stateObject = {
   }
 }
 
-var catObject ={
-    "Aviation Services":
-  [
-    "Aircraft Maintenance & Instrumentation",
-    "Aviation Charter Services",
-    "Aviation Ground Support",
-    "Suncor Owned Aircraft"
-  ],
-  "Chemicals, Gases, & Fluids":
-  [
-    "Catalysts","Chemical Unclassified","Commodity Chemicals","Fuel Additives",
-    "Fuels & Lubricants","Industrial Gases","Lubricant Additives",
-    "Specialty Chemicals","Water Treatment Services"
-  ],
-}
+var catObject = JSON.parse('{{taxonomy|safe}}');
 
 window.onload = function () {
     var stateSel = document.getElementById("stateSel"),

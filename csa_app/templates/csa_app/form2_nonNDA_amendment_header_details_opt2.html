@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3>Form 3: Amendment Header Details</h3>
+      <form method="post" id="the_form">{% csrf_token %}
+      <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p>
+      <div style="position:relative; left: 1px;">
+        <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
+      </div><br>
+      <h5>Parent Contract</h5>
+      <div class="row">
+        <div class="form-group col-md-2 mb-0">
+          {{ ParentContr.form2_contr_num }}
+        </div>
+      </div><br>
+      <h5>Children Contracts</h5>
+      <div id="child_button" class="form-row">
+        <button type="button" name="button_add" id="add_child_button" class="btn btn-secondary btn-xs" onclick="unhide_child ()">   Add Child Contract   </button>
+        <button type="button" name="button_remove" id="remove_child_button" class="btn btn-secondary btn-xs" onclick="remove_child ()">   Remove Child Contract   </button>
+        <br></br>
+      </div>
+      {{ mult_children.management_form }}
+        {% for child_contract in mult_children %}
+        <div class="row">
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_contr_num }}
+          </div>
+          <div class="form-group col-sm-4 mb-0">
+              {{ child_contract.form2_contr_name }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+              {{ child_contract.form2_PGrp }}
+          </div>
+          <div class="form-group col-sm-3 mb-0">
+              {{ child_contract.form2_incoterm }}
+          </div>
+          <div class="form-group col-sm-3 mb-0">
+            {{ child_contract.form2_owner_email }}
+          </div>
+        </div><br>
+        {% endfor %}
+
+      </form>
+      </div>
+      </body>
+
+
+
+      <script>
+
+
+      $( document ).ready(function() {
+        document.getElementById("the_form").reset()
+        for (var i=1; i<15; ++i) {
+          var id1="id_form-" + i + "-form2_contr_num",
+          id2="id_form-" + i + "-form2_contr_name",
+          id3="id_form-" + i + "-form2_PGrp",
+          id4="id_form-" + i + "-form2_incoterm",
+          id5="id_form-" + i + "-form2_owner_email";
+          document.getElementById(id1).style.display = 'none';
+          document.getElementById(id2).style.display = 'none';
+          document.getElementById(id3).style.display = 'none';
+          document.getElementById(id4).style.display = 'none';
+          document.getElementById(id5).style.display = 'none';
+          }
+        document.getElementById('id_form-TOTAL_FORMS').value = 1;
+        add_child_button_disable();
+      });
+
+      var children_unhid = 0,
+      total_forms = document.getElementById('id_form-TOTAL_FORMS'),
+      submit_button = document.getElementById('submit_button'),
+      total_forms_value = children_unhid + 1;
+
+      function unhide_child () {
+        if (children_unhid <14) {
+          ++children_unhid;
+          ++total_forms_value;
+          total_forms.value = total_forms_value;
+          var id1="id_form-" + children_unhid + "-form2_contr_num",
+          id2="id_form-" + children_unhid + "-form2_contr_name",
+          id3="id_form-" + children_unhid + "-form2_PGrp",
+          id4="id_form-" + children_unhid + "-form2_incoterm",
+          id5="id_form-" + children_unhid + "-form2_owner_email";
+          document.getElementById(id1).style.display = 'block';
+          document.getElementById(id2).style.display = 'block';
+          document.getElementById(id3).style.display = 'block';
+          document.getElementById(id4).style.display = 'block';
+          document.getElementById(id5).style.display = 'block';
+          add_child_button_disable();
+        }
+      };
+
+
+      function remove_child () {
+        if (children_unhid >0) {
+          var id1="id_form-" + children_unhid + "-form2_contr_num",
+          id2="id_form-" + children_unhid + "-form2_contr_name",
+          id3="id_form-" + children_unhid + "-form2_PGrp",
+          id4="id_form-" + children_unhid + "-form2_incoterm",
+          id5="id_form-" + children_unhid + "-form2_owner_email";
+          document.getElementById(id1).style.display = 'none';
+          document.getElementById(id2).style.display = 'none';
+          document.getElementById(id3).style.display = 'none';
+          document.getElementById(id4).style.display = 'none';
+          document.getElementById(id5).style.display = 'none';
+          children_unhid = children_unhid - 1;
+          total_forms_value = total_forms_value - 1;
+          total_forms.value = total_forms_value;
+        }
+      };
+
+
+      document.addEventListener('mousemove', disable_submit);
+
+      function disable_submit () {
+        for (var i=0; i<total_forms_value; ++i) {
+          var id1="id_form-" + i + "-form2_contr_num",
+          id2="id_form-" + i + "-form2_contr_name",
+          id3="id_form-" + i + "-form2_PGrp",
+          id4="id_form-" + i + "-form2_incoterm",
+          id5="id_form-" + i + "-form2_owner_email";
+          if (
+              document.getElementById(id1).value.trim() == "" ||
+              document.getElementById(id2).value.trim() == "" ||
+              document.getElementById(id3).selectedIndex == 0 ||
+              document.getElementById(id4).selectedIndex == 0 ||
+              document.getElementById(id5).value.trim() == ""
+            )
+        {
+            submit_button.disabled=true;
+            return;
+        }
+        } submit_button.disabled=false;
+      };
+
+      </script>
+
+      </html>

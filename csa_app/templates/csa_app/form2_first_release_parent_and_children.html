@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3>Form 2: First Release Header Details</h3>
+      <form method="post" id="the_form">{% csrf_token %}
+      <p style="font-size"10px;>* All fields must be filled in before moving on to the next form</p>
+      <div style="position:relative; left: 1px;">
+        <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
+      </div><br>
+      <h5>Parent Contract</h5>
+        {% include "csa_app/form2_parent.html" %}
+      <h5>Children Contracts</h5>
+      <div id="child_button" class="form-row">
+        <button type="button" name="button_add" id="add_child_button" class="btn btn-secondary btn-xs" onclick="unhide_child ()">   Add Child Contract   </button>
+        <button type="button" name="button_remove" id="remove_child_button" class="btn btn-secondary btn-xs" onclick="remove_child ()">   Remove Child Contract   </button>
+        <br></br>
+        <p style="font-size:10px; position:relative; top: -8px;">* Fill in all fields to add another child contract</p>
+      </div>
+      {{ mult_children.management_form }}
+        {% for child_contract in mult_children %}
+        <div class="row">
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_contr_num }}
+          </div>
+          <div class="form-group col-sm-4 mb-0">
+            {{ child_contract.form2_contr_name }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_vendor_number }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_vendor_name }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+              {{ child_contract.form2_POrg }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+              {{ child_contract.form2_PGrp }}
+          </div>
+          <div class="form-group col-sm-3 mb-0">
+              {{ child_contract.form2_currency }}
+          </div>
+          <div class="form-group col-sm-3 mb-0">
+              {{ child_contract.form2_payment_terms }}
+          </div>
+          <div class="form-group col-sm-4 mb-0">
+            {{ child_contract.form2_target_value }}
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_validity_start }}
+            <div class="validity_dates">{{ child_contract.form2_validity_start.help_text }}</div>
+          </div>
+          <div class="form-group col-sm-2 mb-0">
+            {{ child_contract.form2_validity_end }}
+              <div class="validity_dates">{{ child_contract.form2_validity_end.help_text }}</div>
+          </div>
+          <div class="form-group col-sm-4 mb-0">
+            {{ child_contract.form2_incoterm }}
+          </div>
+          <div id="reason" class="form-group col-sm-4 mb-0">
+              {{ child_contract.form2_reasons_for_outside }}
+          </div>
+        </div><br>
+        {% endfor %}
+
+      </form>
+      </div>
+      </body>
+
+
+
+      <script>
+
+
+      var HelpTextClasses = document.querySelectorAll('.validity_dates');
+
+      $( document ).ready(function() {
+          document.getElementById("the_form").reset()
+      for (var i=1; i<15; ++i) {
+      var id1="id_form-" + i + "-form2_contr_num",
+      id2="id_form-" + i + "-form2_contr_name",
+      id3="id_form-" + i + "-form2_vendor_number",
+      id4="id_form-" + i + "-form2_vendor_name",
+      id5="id_form-" + i + "-form2_PGrp",
+      id6="id_form-" + i + "-form2_POrg",
+      id7="id_form-" + i + "-form2_currency",
+      id8="id_form-" + i + "-form2_payment_terms",
+      id9="id_form-" + i + "-form2_target_value",
+      id10="id_form-" + i + "-form2_validity_start",
+      id11="id_form-" + i + "-form2_validity_end",
+      id12="id_form-" + i + "-form2_incoterm",
+      id13="id_form-" + i + "-form2_reasons_for_outside";
+      document.getElementById(id1).style.display = 'none';
+      document.getElementById(id2).style.display = 'none';
+      document.getElementById(id3).style.display = 'none';
+      document.getElementById(id4).style.display = 'none';
+      document.getElementById(id5).style.display = 'none';
+      document.getElementById(id6).style.display = 'none';
+      document.getElementById(id7).style.display = 'none';
+      document.getElementById(id8).style.display = 'none';
+      document.getElementById(id9).style.display = 'none';
+      document.getElementById(id10).style.display = 'none';
+      document.getElementById(id11).style.display = 'none';
+      document.getElementById(id12).style.display = 'none';
+      document.getElementById(id13).style.display = 'none';
+      }
+      var l = HelpTextClasses.length;
+      for (var i=4; i < l; i++) {
+      HelpTextClasses[i].style.display = 'none';
+      }
+      document.getElementById('id_form-TOTAL_FORMS').value = 1;
+      document.getElementById("id_form-0-form2_reasons_for_outside").style.display = 'none';
+      add_child_button_disable();
+      });
+
+      var children_unhid = 0,
+      children_help_text_unhid1 = 2,
+      children_help_text_unhid2 = 3,
+      total_forms = document.getElementById('id_form-TOTAL_FORMS'),
+      submit_button = document.getElementById('submit_button'),
+      total_forms_value = children_unhid + 1;
+
+      function unhide_child () {
+      if (children_unhid <14) {
+      ++children_unhid;
+      ++total_forms_value;
+      children_help_text_unhid1 = children_help_text_unhid1 + 2;
+      children_help_text_unhid2 = children_help_text_unhid2 + 2;
+      total_forms.value = total_forms_value;
+      var id1="id_form-" + children_unhid + "-form2_contr_num",
+      id2="id_form-" + children_unhid + "-form2_contr_name",
+      id3="id_form-" + children_unhid + "-form2_vendor_number",
+      id4="id_form-" + children_unhid + "-form2_vendor_name",
+      id5="id_form-" + children_unhid + "-form2_PGrp",
+      id6="id_form-" + children_unhid + "-form2_POrg",
+      id7="id_form-" + children_unhid + "-form2_currency",
+      id8="id_form-" + children_unhid + "-form2_payment_terms",
+      id9="id_form-" + children_unhid + "-form2_target_value",
+      id10="id_form-" + children_unhid + "-form2_validity_start",
+      id11="id_form-" + children_unhid + "-form2_validity_end",
+      id12="id_form-" + children_unhid + "-form2_incoterm";
+      document.getElementById(id1).style.display = 'block';
+      document.getElementById(id2).style.display = 'block';
+      document.getElementById(id3).style.display = 'block';
+      document.getElementById(id4).style.display = 'block';
+      document.getElementById(id5).style.display = 'block';
+      document.getElementById(id6).style.display = 'block';
+      document.getElementById(id7).style.display = 'block';
+      document.getElementById(id8).style.display = 'block';
+      document.getElementById(id9).style.display = 'block';
+      document.getElementById(id10).style.display = 'block';
+      document.getElementById(id11).style.display = 'block';
+      document.getElementById(id12).style.display = 'block';
+      HelpTextClasses[children_help_text_unhid1].style.display = 'block';
+      HelpTextClasses[children_help_text_unhid2].style.display = 'block';
+      add_child_button_disable();
+      }
+      };
+
+
+      function remove_child () {
+      if (children_unhid >0) {
+      var id1="id_form-" + children_unhid + "-form2_contr_num",
+      id2="id_form-" + children_unhid + "-form2_contr_name",
+      id3="id_form-" + children_unhid + "-form2_vendor_number",
+      id4="id_form-" + children_unhid + "-form2_vendor_name",
+      id5="id_form-" + children_unhid + "-form2_PGrp",
+      id6="id_form-" + children_unhid + "-form2_POrg",
+      id7="id_form-" + children_unhid + "-form2_currency",
+      id8="id_form-" + children_unhid + "-form2_payment_terms",
+      id9="id_form-" + children_unhid + "-form2_target_value",
+      id10="id_form-" + children_unhid + "-form2_validity_start",
+      id11="id_form-" + children_unhid + "-form2_validity_end",
+      id12="id_form-" + children_unhid + "-form2_incoterm",
+      id13="id_form-" + children_unhid + "-form2_reasons_for_outside";
+      document.getElementById(id1).style.display = 'none';
+      document.getElementById(id2).style.display = 'none';
+      document.getElementById(id3).style.display = 'none';
+      document.getElementById(id4).style.display = 'none';
+      document.getElementById(id5).style.display = 'none';
+      document.getElementById(id6).style.display = 'none';
+      document.getElementById(id7).style.display = 'none';
+      document.getElementById(id8).style.display = 'none';
+      document.getElementById(id9).style.display = 'none';
+      document.getElementById(id10).style.display = 'none';
+      document.getElementById(id11).style.display = 'none';
+      document.getElementById(id12).style.display = 'none';
+      document.getElementById(id13).style.display = 'none';
+      HelpTextClasses[children_help_text_unhid1].style.display = 'none';
+      HelpTextClasses[children_help_text_unhid2].style.display = 'none';
+      children_unhid = children_unhid - 1;
+      total_forms_value = total_forms_value - 1;
+      total_forms.value = total_forms_value;
+      children_help_text_unhid1 = children_help_text_unhid1 - 2;
+      children_help_text_unhid2 = children_help_text_unhid2 - 2;
+      }
+      };
+
+      function add_child_button_disable() {
+      document.getElementById('add_child_button').disabled = true;
+      document.getElementById("id_form-" + children_unhid + "-form2_payment_terms").addEventListener('change', unhide_reasons_for_outside_children);
+      if (children_unhid > 0) {
+      previous_child_index = children_unhid-1;
+      document.getElementById("id_form-" + previous_child_index + "-form2_payment_terms").removeEventListener('change', unhide_reasons_for_outside_children);
+      }
+      };
+
+      document.addEventListener('mousemove', add_child_button_enable);
+
+      function unhide_reasons_for_outside_children () {
+      payment_terms = document.getElementById("id_form-" + children_unhid + "-form2_payment_terms");
+      reasons_for_outside = document.getElementById("id_form-" + children_unhid + "-form2_reasons_for_outside");
+      if (payment_terms.value==="60N Due 60 Days from Invoice Date" ||
+      payment_terms.selectedIndex==0) {
+      reasons_for_outside.style.display = "none";
+      reasons_for_outside.selectedIndex = 0;
+      } else {
+      reasons_for_outside.style.display = "block";
+      }
+      };
+
+      function add_child_button_enable() {
+      var id1="id_form-" + children_unhid + "-form2_contr_num",
+      id2="id_form-" + children_unhid + "-form2_contr_name",
+      id3="id_form-" + children_unhid + "-form2_vendor_number",
+      id4="id_form-" + children_unhid + "-form2_vendor_name",
+      id5="id_form-" + children_unhid + "-form2_PGrp",
+      id6="id_form-" + children_unhid + "-form2_POrg",
+      id7="id_form-" + children_unhid + "-form2_currency",
+      id8="id_form-" + children_unhid + "-form2_payment_terms",
+      id9="id_form-" + children_unhid + "-form2_target_value",
+      id10="id_form-" + children_unhid + "-form2_validity_start",
+      id11="id_form-" + children_unhid + "-form2_validity_end",
+      id12="id_form-" + children_unhid + "-form2_incoterm",
+      id13="id_form-" + children_unhid + "-form2_reasons_for_outside";
+      if (document.getElementById(id1).value.trim() != "" &&
+      document.getElementById(id2).value.trim() != "" &&
+      document.getElementById(id3).value.trim() != "" &&
+      document.getElementById(id4).value.trim() != "" &&
+      document.getElementById(id5).selectedIndex > 0 &&
+      document.getElementById(id6).selectedIndex > 0 &&
+      document.getElementById(id7).selectedIndex > 0 &&
+      (document.getElementById(id8).selectedIndex == 16 || (document.getElementById(id8).selectedIndex != 16 && document.getElementById(id8).selectedIndex > 0 && document.getElementById(id13).selectedIndex > 0)) &&
+      document.getElementById(id9).value.trim() != "" &&
+      document.getElementById(id10).value.trim() != "" &&
+      document.getElementById(id11).value.trim() != "" &&
+      document.getElementById(id12).selectedIndex > 0
+      )
+      {
+        document.getElementById('add_child_button').disabled = false;
+      } else {
+        document.getElementById('add_child_button').disabled = true;
+      }
+      };
+
+
+      document.addEventListener('mousemove', disable_submit);
+
+      function disable_submit () {
+      for (var i=0; i<total_forms_value; ++i) {
+      var id1="id_form-" + i + "-form2_contr_num",
+      id2="id_form-" + i + "-form2_contr_name",
+      id3="id_form-" + i + "-form2_vendor_number",
+      id4="id_form-" + i + "-form2_vendor_name",
+      id5="id_form-" + i + "-form2_PGrp",
+      id6="id_form-" + i + "-form2_POrg",
+      id7="id_form-" + i + "-form2_currency",
+      id8="id_form-" + i + "-form2_payment_terms",
+      id9="id_form-" + i + "-form2_target_value",
+      id10="id_form-" + i + "-form2_validity_start",
+      id11="id_form-" + i + "-form2_validity_end",
+      id12="id_form-" + i + "-form2_incoterm",
+      id13="id_form-" + i + "-form2_reasons_for_outside";
+      if (
+        document.getElementById(id1).value.trim() == "" ||
+          document.getElementById(id2).value.trim() == "" ||
+          document.getElementById(id3).value.trim() == "" ||
+          document.getElementById(id4).value.trim() == "" ||
+          document.getElementById(id5).selectedIndex == 0 ||
+          document.getElementById(id6).selectedIndex == 0 ||
+          document.getElementById(id7).selectedIndex == 0 ||
+          (
+            (document.getElementById(id8).selectedIndex > 0 &&
+             document.getElementById(id8).selectedIndex != 16 &&
+             document.getElementById(id13).selectedIndex == 0) ||
+             document.getElementById(id8).selectedIndex == 0
+           ) ||
+          document.getElementById(id9).value.trim() == "" ||
+          document.getElementById(id10).value.trim() == "" ||
+          document.getElementById(id11).value.trim() == "" ||
+          document.getElementById(id12).selectedIndex == 0
+        )
+      {
+          submit_button.disabled=true;
+          return;
+      }
+      } submit_button.disabled=false;
+      };
+
+      </script>
+
+      </html>

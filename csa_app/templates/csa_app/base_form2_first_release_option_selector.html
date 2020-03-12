@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3 id="f1_header">Form 2: First Release Header Details</h3><br>
+      <form class="" action="" method="post">
+        {% csrf_token %}
+        <input type="text" name="request_type_to_pass" id="request_type_to_pass" value="1" style="display:none;">
+        <select name="request_type" id="request_type" class="form-control input-md" autofocus= true style="max-width:40%;">
+          <option value="" selected="selected">Select request type</option>
+          <option value="Release only parent contract">Release only parent contract</option>
+          <option value="Release parent and children contracts">Release parent and children contracts</option>
+          <option value="Parent contract exists, release children contracts only">Parent contract exists, release children contracts only</option><br>
+        </select><br>
+        <input type="submit" class="btn btn-primary" name="" value="Submit">
+      </form>
+    </div>
+  </body>
+
+</html>

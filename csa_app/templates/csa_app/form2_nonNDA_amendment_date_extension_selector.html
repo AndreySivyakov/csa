@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+<html lang="en" dir="ltr">
+
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+      {% include "csa_app/links.html" %}
+  </head>
+
+  <body>
+    <div class="container">
+      <h3>Form 2: Amendment Header Details</h3>
+      <form method="post">{% csrf_token %}
+        <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option1" checked> Amend parent and children contracts<br>
+        <input type="radio" class="form-check-input" id="radio1" name="optradio" value="option2"> Amend children contracts only
+        <br></br>
+        <div style="position:relative; left:1px">
+          <input id="submit_button" type="submit" name="" value="Submit" class="btn btn-primary">
+        </div>
+      </form>
+    </div>
+  </body>
+
+</html>
