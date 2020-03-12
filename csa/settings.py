@@ -88,7 +88,7 @@ DATABASES = {
 DATABASES = {
     'default': {
         'ENGINE': 'sql_server.pyodbc',
-        'NAME': 'scm_AandB_csa_db',
+        'NAME': 'scm_AandB_csa_db1',
         'USER': 'SCMteam',
         'PASSWORD': 'SpendReport2019',
         'HOST': 'scmanalytics.database.windows.net',
@@ -99,6 +99,7 @@ DATABASES = {
         },
     },
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
