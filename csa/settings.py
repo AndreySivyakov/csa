@@ -91,7 +91,7 @@ DATABASES = {
         'USER': 'SCMteam',
         'PASSWORD': 'SpendReport2019',
         'HOST': 'scmanalytics.database.windows.net',
-        'PORT': '',
+        'PORT': '1433',
 
         'OPTIONS': {
             'driver': 'ODBC Driver 17 for SQL Server',
